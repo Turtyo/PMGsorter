@@ -22,7 +22,7 @@ were $p_j$ is the number of places in the activity $j$.
 #### Preliminary verifications
 
 We start by checking that :
-$$\sum_{j=1}^{m}{p_j} \geq nk$$
+$$\sum_{j=1}^{m}{p_j} \geq n\times k$$
 which just means that there are enough places overall for everyone.
 
 #### What we want
