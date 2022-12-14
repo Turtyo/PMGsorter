@@ -27,7 +27,7 @@ which just means that there are enough places overall for everyone.
 
 #### What we want
 
-We want to satisfy as much as possible the subjects in there choices :
+We want to satisfy as much as possible the subjects in their choices :
 $$\max \sum_{i,j}{a_{i,j}w_{i,j}}$$
 
 #### Necessary constraints
