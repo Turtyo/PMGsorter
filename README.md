@@ -17,7 +17,7 @@ the matrix of preferences (or weight matrix); if $w_{i,j}$ is higher that means 
 
 Finally, we have :
 $$P^T = (p_{i,j}) \in \mathbb{N^*_+}^{[1..m]}$$
-were $p_j$ is the number of places in the activity $j$.
+where $p_j$ is the number of places in the activity $j$.
 
 #### Preliminary verifications
 
@@ -33,7 +33,7 @@ $$\max \sum_{i,j}{a_{i,j}w_{i,j}}$$
 #### Necessary constraints
 
 Those are the constraints inherent to the problem : <br /> <br />
-each subject has exactly k activites
+each subject has exactly k activities
 $$\forall i \in [1..n], \sum_{j=1}^{m}{a_{i,j}} = k$$
 
 not more subject by activity than the maximum number allowed
@@ -41,7 +41,7 @@ $$\forall j \in [1..m], \sum_{i=1}^{n}{a_{i,j}} \le p_j$$
 
 #### Additional constraints
 
-As it is now, we could end up in a configuration where some people have all they want, and some other get all their bad choices. Since we don't want that, we introduce several sets of constraints. Some of those may yield good results in some configurations, but may make it impossible to solve the problem in other configurations. <br /> This why we let the sorter test different constraints, from stronger to weaker until it finds a configuration in which it works.
+As it is now, we could end up in a configuration where some people have all they want, and some other get all their bad choices. Since we don't want that, we introduce several sets of constraints. Some of those may yield good results in some configurations, but may make it impossible to solve the problem in other configurations. <br /> This is why we let the sorter test different constraints, from stronger to weaker until it finds a configuration in which it works.
 <br /> <br />
 Here are the constraints, from stronger to weaker : <br />
 **Work in progress**
