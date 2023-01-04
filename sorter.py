@@ -9,23 +9,28 @@ def decode_json():
         values = json.loads(content)
     return values["Vmax"], values["lambda"]
 
-def create_weight_matrix(ranking, m):
+def sort_ranking_by_activities(ranking):
+    n,m = ranking.shape
+    ranking_ordered = np.zeros((n,m))
+    for i in range(n):
+        for j in range(m):
+            ranking_ordered[i,ranking[i,j] - 1 ] = j + 1
+    return ranking_ordered
+            
+
+def create_weight_matrix(ranking_ordered):
     """
-    ranking: matrix where lines are subjects and the 
-    column represents the number associated to activity (1 to m)
-    m: number of activities
+    ranking_ordered : matrix where lines are subjects and each column represents an activity, which means ranking_ordered[i,j] is the raking given by student i
+    to activity j (from 1 to m)
 
     return: a weight matrix
     """
-    w = []
-    n = np.array(ranking).shape[0]
+    n,m = ranking_ordered.shape
+    w = np.zeros((n,m))
     _Vmax, _lambda = decode_json()
     for i in range(n):
-        w_line = [0]*m
         for j in range(m):
-            value = round(_Vmax*exp(-j*_lambda))
-            w_line[ranking[i][j] - 1] = value
-        w.append(w_line)
+            w[i,j] = round(_Vmax*exp(-ranking_ordered[i,j]*_lambda))
     return w
 
 def solve_problem(n, m, p, k, w):
