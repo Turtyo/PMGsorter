@@ -9,6 +9,7 @@ def ranking_gen(number_of_students,number_of_activities):
     ranking=[]
     for i in range(number_of_students):
         for j in range(number_of_activities):
-            ranking.append(rd.shuffle(choices))
+        rd.shuffle(choices)
+        ranking.append(choices)
     return ranking
 
