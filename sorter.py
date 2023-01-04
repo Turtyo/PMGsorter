@@ -59,10 +59,11 @@ def solve_problem(n, m, p, k, w):
 ### INPUT
 ranking = [ [1, 2, 3],
             [1, 3, 2],
-            [3, 1, 2]]
+            [3, 1, 2],
+            [2, 1, 3]]
 
 # number of places in each activity
-p = [1, 1, 1]
+p = [2, 1, 1]
 
 # k subject must be affected to each subject
 k = 1
@@ -96,7 +97,7 @@ prob = solve_problem(n, m, p, k, w)
 A = []
 for i in range(n):
     line = []
-    for j in range(n):
+    for j in range(m):
         line.append(pulp.value(a[i,j]))
     A.append(line)
 
