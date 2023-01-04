@@ -8,8 +8,9 @@ def ranking_gen(number_of_students,number_of_activities):
     choices = [j + 1 for j in range(number_of_activities)]
     ranking=[]
     for i in range(number_of_students):
-        for j in range(number_of_activities):
         rd.shuffle(choices)
         ranking.append(choices)
     return ranking
 
+if __name__ == "__main__" :
+    print(ranking_gen(10,5))
