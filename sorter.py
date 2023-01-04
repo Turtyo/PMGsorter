@@ -1,6 +1,13 @@
+import json
 from math import exp
 import numpy as np
 import pulp
+
+def decode_json():
+    with open("./values.json", "r") as f:
+        content = f.read()
+        values = json.loads(content)
+    return values["Vmax"], values["lambda"]
 
 def create_weight_matrix(ranking, m):
     """
@@ -11,9 +18,8 @@ def create_weight_matrix(ranking, m):
     return: a weight matrix
     """
     w = []
-    n, m = np.array(ranking).shape
-    _Vmax = 10 # Arbitrary value for now
-    _lambda = 1 # Arbitrary value for now
+    n = np.array(ranking).shape[0]
+    _Vmax, _lambda = decode_json()
     for i in range(n):
         w_line = [0]*m
         for j in range(m):
@@ -28,6 +34,7 @@ def solve_problem(n, m, p, k, w):
 
     ## Constraints
     # Each subject must have k activities
+    global a
     for i in range(n):
         prob += pulp.lpSum(a[i,:]) == k
 
@@ -53,12 +60,6 @@ def solve_problem(n, m, p, k, w):
 ranking = [ [1, 2, 3],
             [1, 3, 2],
             [3, 1, 2]]
-# n is the number of subject, m the number of activities
-n,m = np.array(ranking).shape
-
-# Weight matrix (or matrix of preferences)
-w = create_weight_matrix(ranking, m)
-print(np.array(w))
 
 # number of places in each activity
 p = [1, 1, 1]
@@ -66,12 +67,19 @@ p = [1, 1, 1]
 # k subject must be affected to each subject
 k = 1
 
+# n is the number of subject, m the number of activities
+m = len(p)
+n = np.array(ranking).shape[0]
+
+# Weight matrix (or matrix of preferences)
+w = create_weight_matrix(ranking, m)
+print(np.array(w))
+
 ###
 ### PRELIMINARY CHECK
 # Asserting there are enough places for everyone
 assert sum(p) >= n*k
 assert len(p) == m
-assert np.array(ranking).shape == np.array(w).shape
 
 ###
 ### SOLVE
@@ -79,7 +87,7 @@ assert np.array(ranking).shape == np.array(w).shape
 a = np.empty((n,m), dtype=object)
 for i in range(n):
     for j in range(m):
-        a[i,j] = pulp.LpVariable('a_{}_{}'.format(i,j),cat=pulp.LpBinary)
+        a[i,j] = pulp.LpVariable(f"a_{i}_{j}", cat=pulp.LpBinary)
 
 prob = solve_problem(n, m, p, k, w)
 ###
