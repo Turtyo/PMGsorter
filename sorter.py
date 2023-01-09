@@ -56,53 +56,58 @@ def solve_problem(n, m, p, k, w):
     assert pulp.LpStatus[prob.solve()] == 'Optimal'
     return prob
 
-### INPUT
-ranking = [ [1, 2, 3],
-            [1, 3, 2],
-            [3, 1, 2],
-            [2, 1, 3]]
 
-# number of places in each activity
-p = [2, 1, 1]
+### TEST PART
 
-# k subject must be affected to each subject
-k = 1
+if __name__ == '__main__' :
+    
+    ### INPUT
+    ranking = [ [1, 2, 3],
+                [1, 3, 2],
+                [3, 1, 2],
+                [2, 1, 3]]
 
-# n is the number of subject, m the number of activities
-m = len(p)
-n = np.array(ranking).shape[0]
+    # number of places in each activity
+    p = [2, 1, 1]
 
-# Weight matrix (or matrix of preferences)
-w = create_weight_matrix(ranking, m)
-print(np.array(w))
+    # k subject must be affected to each subject
+    k = 1
 
-###
-### PRELIMINARY CHECK
-# Asserting there are enough places for everyone
-assert sum(p) >= n*k
-assert len(p) == m
+    # n is the number of subject, m the number of activities
+    m = len(p)
+    n = np.array(ranking).shape[0]
 
-###
-### SOLVE
-# Decision variables
-a = np.empty((n,m), dtype=object)
-for i in range(n):
-    for j in range(m):
-        a[i,j] = pulp.LpVariable(f"a_{i}_{j}", cat=pulp.LpBinary)
+    # Weight matrix (or matrix of preferences)
+    w = create_weight_matrix(ranking, m)
+    print(np.array(w))
 
-prob = solve_problem(n, m, p, k, w)
-###
-### DISPLAY RESULTS
+    ###
+    ### PRELIMINARY CHECK
+    # Asserting there are enough places for everyone
+    assert sum(p) >= n*k
+    assert len(p) == m
 
-A = []
-for i in range(n):
-    line = []
-    for j in range(m):
-        line.append(pulp.value(a[i,j]))
-    A.append(line)
+    ###
+    ### SOLVE
+    # Decision variables
+    a = np.empty((n,m), dtype=object)
+    for i in range(n):
+        for j in range(m):
+            a[i,j] = pulp.LpVariable(f"a_{i}_{j}", cat=pulp.LpBinary)
 
-print("Variables:")
-print(np.array(A))
+    prob = solve_problem(n, m, p, k, w)
+    ###
+    ### DISPLAY RESULTS
 
-print('Objective: ', pulp.value(prob.objective))
-###
+    A = []
+    for i in range(n):
+        line = []
+        for j in range(m):
+            line.append(pulp.value(a[i,j]))
+        A.append(line)
+
+    print("Variables:")
+    print(np.array(A))
+
+    print('Objective: ', pulp.value(prob.objective))
+    ###
