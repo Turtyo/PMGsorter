@@ -82,16 +82,16 @@ if __name__ == '__main__' :
     # number of places in each activity
     p = [2, 1, 1]
 
-    # k subject must be affected to each subject
+    # k activities must be affected to each subject
     k = 1
 
     # n is the number of subject, m the number of activities
     m = len(p)
-    n = np.array(ranking).shape[0]
+    n = len(ranking)
 
     # Weight matrix (or matrix of preferences)
-
-    w = create_weight_matrix(ranking)
+    sorted_by_activities = sort_ranking_by_activities(ranking, m)
+    w = create_weight_matrix(sorted_by_activities)
 
     print(np.array(w))
 
@@ -127,15 +127,23 @@ if __name__ == '__main__' :
     ###
 
     ### Sorting tests
+    
+
 
     ranking_bis = [ [1, 2, 3],
                     [1],
                     [3, 1],
-                    [2, 1, 3]]
+                    [2, 3, 1]]
+    
     rk_ord = sort_ranking_by_activities(ranking_bis,3)
+    
+    #should return [[1. 2. 3.]
+    #               [1. 0. 0.]
+    #               [2. 0. 1.]
+    #               [3. 1. 2.]]
+    # for line 4 for example [2,3,1] means activity 2 is 1st choice, activity 3 is 2nd choice and activity 1 is 3rd choice, which gives [3,1,2] when each column is an activity
 
     print("\nRanking bis : ")
     print(ranking_bis)
     print("\nRanking ordered :")
     print(rk_ord)
-
