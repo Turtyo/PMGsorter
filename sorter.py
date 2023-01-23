@@ -9,23 +9,35 @@ def decode_json():
         values = json.loads(content)
     return values["Vmax"], values["lambda"]
 
-def create_weight_matrix(ranking, m):
+def sort_ranking_by_activities(ranking,m):
     """
-    ranking: matrix where lines are subjects and the 
-    column represents the number associated to activity (1 to m)
-    m: number of activities
+    Sorts the rankings of each student to make it so that each column represents an activity, and not the ranking given by each subject to an activity
+    A list like [1,3,4,2] which means that the subject wants the activity 1, then 3, then 4, then 2 will thus become [1,4,2,3] (activity 1 is ranked 1st, activity 2 is ranked 4th...)
+    m -> int : number of activities that each subject should classify, needed since we can't be sure any of the subjects has ranked the correct number
+    
+    return : numpy array, ranking ordered by activity
+    """
+    n = len(ranking) # number of lines which is the number of students
+    ranking_ordered = np.zeros((n,m))
+    for i in range(n):
+        for j in range(len(ranking[i])):
+            ranking_ordered[i,ranking[i][j] - 1 ] = j + 1
+    return ranking_ordered
+            
+
+def create_weight_matrix(ranking_ordered):
+    """
+    ranking_ordered : matrix where lines are subjects and each column represents an activity, which means ranking_ordered[i,j] is the raking given by student i
+    to activity j (from 1 to m)
 
     return: a weight matrix
     """
-    w = []
-    n = np.array(ranking).shape[0]
+    n,m = ranking_ordered.shape
+    w = np.zeros((n,m))
     _Vmax, _lambda = decode_json()
     for i in range(n):
-        w_line = [0]*m
         for j in range(m):
-            value = round(_Vmax*exp(-j*_lambda))
-            w_line[ranking[i][j] - 1] = value
-        w.append(w_line)
+            w[i,j] = round(_Vmax*exp(-ranking_ordered[i,j]*_lambda))
     return w
 
 def solve_problem(n, m, p, k, w):
@@ -78,7 +90,9 @@ if __name__ == '__main__' :
     n = np.array(ranking).shape[0]
 
     # Weight matrix (or matrix of preferences)
-    w = create_weight_matrix(ranking, m)
+
+    w = create_weight_matrix(ranking)
+
     print(np.array(w))
 
     ###
@@ -111,3 +125,17 @@ if __name__ == '__main__' :
 
     print('Objective: ', pulp.value(prob.objective))
     ###
+
+    ### Sorting tests
+
+    ranking_bis = [ [1, 2, 3],
+                    [1],
+                    [3, 1],
+                    [2, 1, 3]]
+    rk_ord = sort_ranking_by_activities(ranking_bis,3)
+
+    print("\nRanking bis : ")
+    print(ranking_bis)
+    print("\nRanking ordered :")
+    print(rk_ord)
+
