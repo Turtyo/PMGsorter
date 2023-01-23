@@ -68,66 +68,68 @@ def solve_problem(n, m, p, k, w):
     assert pulp.LpStatus[prob.solve()] == 'Optimal'
     return prob
 
-### INPUT
-ranking = np.array([ [1, 2, 3],
-            [1, 3, 2],
-            [3, 1, 2],
-            [2, 1, 3]])
+if __name__ == '__main__' :
 
-# number of places in each activity
-p = [2, 1, 1]
+    ### INPUT
+    ranking = np.array([ [1, 2, 3],
+                [1, 3, 2],
+                [3, 1, 2],
+                [2, 1, 3]])
 
-# k subject must be affected to each subject
-k = 1
+    # number of places in each activity
+    p = [2, 1, 1]
 
-# n is the number of subject, m the number of activities
-m = len(p)
-n = np.array(ranking).shape[0]
+    # k subject must be affected to each subject
+    k = 1
 
-# Weight matrix (or matrix of preferences)
-w = create_weight_matrix(ranking)
-print(np.array(w))
+    # n is the number of subject, m the number of activities
+    m = len(p)
+    n = np.array(ranking).shape[0]
 
-###
-### PRELIMINARY CHECK
-# Asserting there are enough places for everyone
-assert sum(p) >= n*k
-assert len(p) == m
+    # Weight matrix (or matrix of preferences)
+    w = create_weight_matrix(ranking)
+    print(np.array(w))
 
-###
-### SOLVE
-# Decision variables
-a = np.empty((n,m), dtype=object)
-for i in range(n):
-    for j in range(m):
-        a[i,j] = pulp.LpVariable(f"a_{i}_{j}", cat=pulp.LpBinary)
+    ###
+    ### PRELIMINARY CHECK
+    # Asserting there are enough places for everyone
+    assert sum(p) >= n*k
+    assert len(p) == m
 
-prob = solve_problem(n, m, p, k, w)
-###
-### DISPLAY RESULTS
+    ###
+    ### SOLVE
+    # Decision variables
+    a = np.empty((n,m), dtype=object)
+    for i in range(n):
+        for j in range(m):
+            a[i,j] = pulp.LpVariable(f"a_{i}_{j}", cat=pulp.LpBinary)
 
-A = []
-for i in range(n):
-    line = []
-    for j in range(m):
-        line.append(pulp.value(a[i,j]))
-    A.append(line)
+    prob = solve_problem(n, m, p, k, w)
+    ###
+    ### DISPLAY RESULTS
 
-print("Variables:")
-print(np.array(A))
+    A = []
+    for i in range(n):
+        line = []
+        for j in range(m):
+            line.append(pulp.value(a[i,j]))
+        A.append(line)
 
-print('Objective: ', pulp.value(prob.objective))
-###
+    print("Variables:")
+    print(np.array(A))
 
-### Sorting tests
+    print('Objective: ', pulp.value(prob.objective))
+    ###
 
-ranking_bis = [ [1, 2, 3],
-                [1],
-                [3, 1],
-                [2, 1, 3]]
-rk_ord = sort_ranking_by_activities(ranking_bis,3)
+    ### Sorting tests
 
-print("\nRanking bis : ")
-print(ranking_bis)
-print("\nRanking ordered :")
-print(rk_ord)
+    ranking_bis = [ [1, 2, 3],
+                    [1],
+                    [3, 1],
+                    [2, 1, 3]]
+    rk_ord = sort_ranking_by_activities(ranking_bis,3)
+
+    print("\nRanking bis : ")
+    print(ranking_bis)
+    print("\nRanking ordered :")
+    print(rk_ord)
