@@ -1,14 +1,15 @@
 import json
 from math import exp
 import numpy as np
+import numpy.typing as npt
 import pulp
 from typing import NewType
 
+
 Pulp_Lp_Problem = NewType("Pulp_Lp_Problem", pulp.pulp.LpProblem)
 Ranking_matrix = list[list[int]]
-Activities_matrix = list[list[int]]
-Weight_matrix = list[list[int]]
-
+Activities_matrix = npt.NDArray[npt.NDArray[int]]
+Weight_matrix = npt.NDArray[npt.NDArray[int]]
 
 def decode_json() -> tuple[int, int]:
     with open("./values.json", "r") as f:
