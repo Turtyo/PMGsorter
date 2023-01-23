@@ -68,13 +68,16 @@ def solve_problem(n, m, p, k, w):
     assert pulp.LpStatus[prob.solve()] == 'Optimal'
     return prob
 
-if __name__ == '__main__' :
 
+### TEST PART
+
+if __name__ == '__main__' :
+    
     ### INPUT
-    ranking = np.array([ [1, 2, 3],
+    ranking = [ [1, 2, 3],
                 [1, 3, 2],
                 [3, 1, 2],
-                [2, 1, 3]])
+                [2, 1, 3]]
 
     # number of places in each activity
     p = [2, 1, 1]
@@ -87,7 +90,9 @@ if __name__ == '__main__' :
     n = np.array(ranking).shape[0]
 
     # Weight matrix (or matrix of preferences)
+
     w = create_weight_matrix(ranking)
+
     print(np.array(w))
 
     ###
@@ -133,3 +138,4 @@ if __name__ == '__main__' :
     print(ranking_bis)
     print("\nRanking ordered :")
     print(rk_ord)
+
