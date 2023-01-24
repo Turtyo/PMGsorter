@@ -1,6 +1,14 @@
 ### Import
 import numpy as np
+from typing import Callable
+
+### Type
+
+Padded_Matrix = np.ndarray
+function = Callable
+
 ### Functions
+
 def define_paddings() -> dict :
     """
     Returns the dictionnary of the functions for different paddings
