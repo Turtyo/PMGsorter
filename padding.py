@@ -20,9 +20,6 @@ def define_paddings() -> dict :
             'max' : max_value_padding,
             'min' : min_value_padding}
 
-def select_padding_type(padding_name : str, dict_of_padding : dict) -> function :
-    return dict_of_padding.get(padding_name)
-
 def random_padding(matrix_to_pad : np.ndarray) -> Padded_Matrix :
     
     return 0
@@ -55,7 +52,7 @@ def pad_matrix(padding_name : str, matrix_to_pad : np.ndarray) -> Padded_Matrix 
     the matrix should be numpy
     """
     dict_of_padding = define_paddings()
-    return select_padding_type(padding_name, dict_of_padding)(matrix_to_pad)
+    return dict_of_padding.get(padding_name)(matrix_to_pad)
 
 def padding_main(matrix_to_pad : np.ndarray, padding_name : str = 'linear', interactive_mode : bool = True) -> Padded_Matrix :
     dict_of_padding = define_paddings()
