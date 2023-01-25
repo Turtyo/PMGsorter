@@ -17,7 +17,6 @@ def define_paddings() -> dict :
     
     """
     return {'random' : random_padding,
-            'linear' : linear_padding,
             'max' : max_value_padding,
             'min' : min_value_padding}
 
@@ -84,13 +83,14 @@ if __name__ == '__main__':
     matrix_to_pad = np.array([[1,2,3],
                        [2,1,0],
                        [1,0,2],
-                       [0,0,1]])
+                       [0,0,1],
+                       [0,0,0]])
     
     print("Matrix to pad")
     print(matrix_to_pad)
     print("Padded with max value")
     print(max_value_padding(matrix_to_pad))
-    print("Matrix to pad")
-    print(matrix_to_pad)
     print("Padded with min value")
     print(min_value_padding(matrix_to_pad))
+    print("Padded with random value")
+    print(random_padding(matrix_to_pad))
