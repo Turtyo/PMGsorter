@@ -34,12 +34,6 @@ def random_padding(matrix_to_pad : np.ndarray) -> Padded_Matrix :
                 padded_matrix[i,j] = ranks_to_add[zero_counter]
                 zero_counter += 1
     return padded_matrix
-        
-        
-    return padded_matrix
-
-def linear_padding(matrix_to_pad : np.ndarray) -> Padded_Matrix :
-    return 1
 
 def max_value_padding(matrix_to_pad : np.ndarray) -> Padded_Matrix :
     """
