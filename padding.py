@@ -1,16 +1,19 @@
 ### Import
 import numpy as np
 from typing import Callable
+from typing import Dict
 import random
+import numpy.typing as npt
 
 ### Type
 
-Padded_Matrix = np.ndarray
-function = Callable
+Padded_matrix = npt.NDArray[npt.NDArray[int]]
+Not_padded_matrix = npt.NDArray[npt.NDArray[int]]
+Function = Callable
 
 ### Functions
 
-def define_paddings() -> dict :
+def define_paddings() -> Dict[str,Function] :
     """
     Returns the dictionnary of the functions for different paddings
     That way, the padding selection will just need to call the function related to the given key
@@ -20,7 +23,7 @@ def define_paddings() -> dict :
             'max' : max_value_padding,
             'min' : min_value_padding}
 
-def random_padding(matrix_to_pad : np.ndarray) -> Padded_Matrix :
+def random_padding(matrix_to_pad : Not_padded_matrix) -> Padded_matrix :
     n,m = matrix_to_pad.shape
     padded_matrix = np.ndarray.copy(matrix_to_pad)
     for i in range(n):
@@ -34,7 +37,7 @@ def random_padding(matrix_to_pad : np.ndarray) -> Padded_Matrix :
                 zero_counter += 1
     return padded_matrix
 
-def max_value_padding(matrix_to_pad : np.ndarray) -> Padded_Matrix :
+def max_value_padding(matrix_to_pad : Not_padded_matrix) -> Padded_matrix :
     """
     This function will pad the matrix by replacing all the zeros by the maximum value that is possible for the problem to still be correct (hence m, the number of activities)
     """
@@ -43,7 +46,7 @@ def max_value_padding(matrix_to_pad : np.ndarray) -> Padded_Matrix :
     padded_matrix[padded_matrix == 0] = m
     return padded_matrix
 
-def min_value_padding(matrix_to_pad : np.ndarray) -> Padded_Matrix :
+def min_value_padding(matrix_to_pad : Not_padded_matrix) -> Padded_matrix :
     """
     This function will pad the matrix by replacing the zeros of each line by the minimum value that is not lower than the max value of said line (e.g. the max value of the line + 1)
     """
