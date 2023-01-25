@@ -56,28 +56,12 @@ def min_value_padding(matrix_to_pad : Not_padded_matrix) -> Padded_matrix :
         padded_matrix[i][padded_matrix[i] == 0] = np.amax(padded_matrix[i],axis=0) + 1
     return padded_matrix
 
-def pad_matrix(padding_name : str, matrix_to_pad : np.ndarray) -> Padded_Matrix :
+def pad_matrix(matrix_to_pad : Not_padded_matrix, padding_name : str = 'random', ) -> Padded_matrix :
     """
     Return : matrix_to_pad padded with the chosen padding type
     the matrix should be numpy
     """
-    dict_of_padding = define_paddings()
-    return dict_of_padding.get(padding_name)(matrix_to_pad)
-
-def padding_main(matrix_to_pad : np.ndarray, padding_name : str = 'linear', interactive_mode : bool = True) -> Padded_Matrix :
-    dict_of_padding = define_paddings()
-    _padding_name = padding_name
-    
-    if(interactive_mode):
-        _padding_name = ""
-        print("Here are the paddings you can choose")
-        paddings = dict_of_padding.keys
-        for name in paddings :
-            print(name)
-        while(_padding_name not in paddings):
-            _padding_name = input("Please choose one of the paddings : ")
-            
-    return pad_matrix(_padding_name, matrix_to_pad)
+    return define_paddings().get(padding_name)(matrix_to_pad)
 
 if __name__ == '__main__':
     dict_of_padding = define_paddings()
