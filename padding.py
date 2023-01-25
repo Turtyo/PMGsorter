@@ -84,3 +84,10 @@ if __name__ == "__main__":
     print(min_value_padding(matrix_to_pad))
     print("Padded with random value")
     print(random_padding(matrix_to_pad))
+
+    print("\nWith the pad_matrix function :\n\nmax value")
+    print(pad_matrix(matrix_to_pad, "max"))
+    print("\nmin value")
+    print(pad_matrix(matrix_to_pad, "min"))
+    print("\nrandom")
+    print(pad_matrix(matrix_to_pad))
