@@ -4,6 +4,7 @@ import numpy as np
 import numpy.typing as npt
 import pulp
 from typing import NewType
+import padding
 
 
 Pulp_Lp_Problem = NewType("Pulp_Lp_Problem", pulp.pulp.LpProblem)
@@ -20,13 +21,13 @@ def decode_json() -> tuple[int, int]:
 
 def sort_ranking_by_activities(ranking: Ranking_matrix, m: int) -> Activities_matrix:
     """
-    Sorts the rankings of each student to make it so that each column represents an activity, and not the ranking given by each subject to an activity
+    Sorts the rankings of each subject to make it so that each column represents an activity, and not the ranking given by each subject to an activity
     A list like [1,3,4,2] which means that the subject wants the activity 1, then 3, then 4, then 2 will thus become [1,4,2,3] (activity 1 is ranked 1st, activity 2 is ranked 4th...)
     m -> int : number of activities that each subject should classify, needed since we can't be sure any of the subjects has ranked the correct number
 
     return : numpy array, ranking ordered by activity
     """
-    n = len(ranking)  # number of lines which is the number of students
+    n = len(ranking)  # number of lines which is the number of subjects
     ranking_ordered = np.zeros((n, m))
     for i in range(n):
         for j in range(len(ranking[i])):
@@ -36,7 +37,7 @@ def sort_ranking_by_activities(ranking: Ranking_matrix, m: int) -> Activities_ma
 
 def create_weight_matrix(ranking_ordered: Activities_matrix) -> Weight_matrix:
     """
-    ranking_ordered : matrix where lines are subjects and each column represents an activity, which means ranking_ordered[i,j] is the raking given by student i
+    ranking_ordered : matrix where lines are subjects and each column represents an activity, which means ranking_ordered[i,j] is the ranking given by subject i
     to activity j (from 1 to m)
 
     return: a weight matrix
@@ -48,6 +49,15 @@ def create_weight_matrix(ranking_ordered: Activities_matrix) -> Weight_matrix:
         for j in range(m):
             w[i, j] = round(_Vmax * exp(-ranking_ordered[i, j] * _lambda))
     return w
+
+def formate_matrix(ranking: Ranking_matrix, m : int, padding_name: str = "random") -> Weight_matrix:
+    """
+    This function will transform the classification we get from the subject into a matrix that is usable by the model, by applying the functions defined above and in padding
+    m : number of activities that each subject should classify
+    """
+    ranking_ordered = sort_ranking_by_activities(ranking, m)
+    weight_matrix = create_weight_matrix(ranking_ordered)
+    return padding.pad_matrix(weight_matrix,padding_name=padding_name)
 
 
 def solve_problem(n: int, m: int, p: int, k: int, w: int) -> Pulp_Lp_Problem:
