@@ -1,7 +1,6 @@
 ### Import
 import numpy as np
-from typing import Callable
-from typing import Dict
+from typing import Callable, Dict
 import random
 import numpy.typing as npt
 
