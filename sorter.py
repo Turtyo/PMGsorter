@@ -60,8 +60,8 @@ def formate_matrix(
     m : number of activities that each subject should classify
     """
     ranking_ordered = sort_ranking_by_activities(ranking, m)
-    weight_matrix = create_weight_matrix(ranking_ordered)
-    return padding.pad_matrix(weight_matrix, padding_name=padding_name)
+    padded_matrix = padding.pad_matrix(ranking_ordered, padding_name=padding_name)
+    return create_weight_matrix(padded_matrix)
 
 
 def solve_problem(n: int, m: int, p: int, k: int, w: int) -> Pulp_Lp_Problem:
