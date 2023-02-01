@@ -110,8 +110,7 @@ if __name__ == "__main__":
     n = len(ranking)
 
     # Weight matrix (or matrix of preferences)
-    sorted_by_activities = sort_ranking_by_activities(ranking, m)
-    w = create_weight_matrix(sorted_by_activities)
+    w = formate_matrix(ranking, m)
 
     print(np.array(w))
 
