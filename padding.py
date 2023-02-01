@@ -30,7 +30,7 @@ def random_padding(matrix_to_pad: Not_padded_matrix) -> Padded_matrix:
     n, m = matrix_to_pad.shape
     padded_matrix = np.ndarray.copy(matrix_to_pad)
     for i in range(n):
-        max_on_line = np.max(padded_matrix[i])
+        max_on_line = int(np.max(padded_matrix[i]))
         ranks_to_add = [var for var in range(max_on_line + 1, m + 1)]
         random.shuffle(ranks_to_add)
         padded_matrix[i][padded_matrix[i] == 0] = ranks_to_add
