@@ -12,6 +12,7 @@ Ranking_matrix = list[list[int]]
 Activities_matrix = npt.NDArray[npt.NDArray[int]]
 Weight_matrix = npt.NDArray[npt.NDArray[int]]
 
+
 def decode_json() -> tuple[int, int]:
     with open("./values.json", "r") as f:
         content = f.read()
@@ -50,14 +51,17 @@ def create_weight_matrix(ranking_ordered: Activities_matrix) -> Weight_matrix:
             w[i, j] = round(_Vmax * exp(-ranking_ordered[i, j] * _lambda))
     return w
 
-def formate_matrix(ranking: Ranking_matrix, m : int, padding_name: str = "random") -> Weight_matrix:
+
+def formate_matrix(
+    ranking: Ranking_matrix, m: int, padding_name: str = "random"
+) -> Weight_matrix:
     """
     This function will transform the classification we get from the subject into a matrix that is usable by the model, by applying the functions defined above and in padding
     m : number of activities that each subject should classify
     """
     ranking_ordered = sort_ranking_by_activities(ranking, m)
     weight_matrix = create_weight_matrix(ranking_ordered)
-    return padding.pad_matrix(weight_matrix,padding_name=padding_name)
+    return padding.pad_matrix(weight_matrix, padding_name=padding_name)
 
 
 def solve_problem(n: int, m: int, p: int, k: int, w: int) -> Pulp_Lp_Problem:
@@ -143,25 +147,17 @@ if __name__ == "__main__":
     ###
 
     ### Sorting tests
-    
 
+    ranking_bis = [[1, 2, 3], [1], [3, 1], [2, 3, 1]]
 
-
-    ranking_bis = [ [1, 2, 3],
-                    [1],
-                    [3, 1],
-                    [2, 3, 1]]
-    
-    rk_ord = sort_ranking_by_activities(ranking_bis,3)
-    #should return [[1. 2. 3.]
+    rk_ord = sort_ranking_by_activities(ranking_bis, 3)
+    # should return [[1. 2. 3.]
     #               [1. 0. 0.]
     #               [2. 0. 1.]
     #               [3. 1. 2.]]
     # for line 4 for example [2,3,1] means activity 2 is 1st choice, activity 3 is 2nd choice and activity 1 is 3rd choice, which gives [3,1,2] when each column is an activity
 
-
     print("\nRanking bis : ")
     print(ranking_bis)
     print("\nRanking ordered :")
     print(rk_ord)
-
